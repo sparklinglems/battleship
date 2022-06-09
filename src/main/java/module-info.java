@@ -4,6 +4,6 @@ module com.example.battleship {
 
     requires com.dlsc.formsfx;
 
-    opens com.example.battleship to javafx.fxml;
-    exports com.example.battleship;
+    opens com.battleship to javafx.fxml;
+    exports com.battleship;
 }
