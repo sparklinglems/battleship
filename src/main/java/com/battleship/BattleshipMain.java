@@ -24,6 +24,10 @@ public class BattleshipMain extends Application {
 
     private Random random = new Random();
 
+    private int score;
+
+    private int difficulty;
+
     Parent createContent() {
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
@@ -46,7 +50,7 @@ public class BattleshipMain extends Application {
             }
 
             if (enemyTurn)
-                enemyTurn = enemy.TakeShot(playerBoard);
+                enemyTurn = enemy.takeShot(playerBoard);
         });
 
         playerBoard = new Board(false, event -> {
@@ -56,7 +60,7 @@ public class BattleshipMain extends Application {
             Cell cell = (Cell) event.getSource();
             if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY,playerBoard,cell.x,cell.y), cell.x, cell.y)) {
                 if (--shipsToPlace == 0) {
-                    running = enemy.PlaceShips(enemy);
+                    running = enemy.placeShips(enemy);
                 }
             }
         });

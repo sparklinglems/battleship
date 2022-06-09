@@ -20,7 +20,7 @@ public class Cell extends Rectangle {
         }
 
         public boolean shoot() {
-            if (!(x < 0 || x > 9 ||  y < 0 || y > 9)) {
+            //System.out.println(x + "  " + y);
                 wasShot = true;
                 setFill(Color.BLACK);
 
@@ -32,9 +32,14 @@ public class Cell extends Rectangle {
                     }
                     return true;
                 }
-            }
+
             return false;
 
+        }
+
+        public void fin(){
+            wasShot = true;
+            setFill(Color.BLACK);
         }
 
 

@@ -1,6 +1,6 @@
 package com.battleship;
 
 public interface Enemy {
-    boolean PlaceShips(Board enemyBoard);
-    boolean TakeShot(Board playerBoard);
+    boolean placeShips(Board enemyBoard);
+    boolean takeShot(Board playerBoard);
 }
