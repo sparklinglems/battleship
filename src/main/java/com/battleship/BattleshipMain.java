@@ -12,12 +12,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import com.battleship.Board.Cell;
-
 public class BattleshipMain extends Application {
 
     private boolean running = false;
-    private Board enemyBoard, playerBoard;
+    private Board playerBoard;
+    private Easy enemy;
 
     private int shipsToPlace = 5;
 
@@ -25,13 +24,13 @@ public class BattleshipMain extends Application {
 
     private Random random = new Random();
 
-    private Parent createContent() {
+    Parent createContent() {
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
 
         root.setRight(new Text("RIGHT SIDEBAR - CONTROLS"));
 
-        enemyBoard = new Board(true, event -> {
+        enemy = new Easy(true, event -> {
             if (!running)
                 return;
 
@@ -41,13 +40,13 @@ public class BattleshipMain extends Application {
 
             enemyTurn = !cell.shoot();
 
-            if (enemyBoard.ships == 0) {
+            if (enemy.ships == 0) {
                 System.out.println("YOU WIN");
-                System.exit(0);
+                //System.exit(0);
             }
 
             if (enemyTurn)
-                enemyMove();
+                enemyTurn = enemy.TakeShot(playerBoard);
         });
 
         playerBoard = new Board(false, event -> {
@@ -55,14 +54,14 @@ public class BattleshipMain extends Application {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
+            if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY,playerBoard,cell.x,cell.y), cell.x, cell.y)) {
                 if (--shipsToPlace == 0) {
-                    startGame();
+                    running = enemy.PlaceShips(enemy);
                 }
             }
         });
 
-        VBox vbox = new VBox(50, enemyBoard, playerBoard);
+        VBox vbox = new VBox(50, enemy, playerBoard);
         vbox.setAlignment(Pos.CENTER);
 
         root.setCenter(vbox);
@@ -70,39 +69,9 @@ public class BattleshipMain extends Application {
         return root;
     }
 
-    private void enemyMove() {
-        while (enemyTurn) {
-            int x = random.nextInt(10);
-            int y = random.nextInt(10);
 
-            Cell cell = playerBoard.getCell(x, y);
-            if (cell.wasShot)
-                continue;
 
-            enemyTurn = cell.shoot();
 
-            if (playerBoard.ships == 0) {
-                System.out.println("YOU LOSE");
-                System.exit(0);
-            }
-        }
-    }
-
-    private void startGame() {
-        // place enemy ships
-        int type = 5;
-
-        while (type > 0) {
-            int x = random.nextInt(10);
-            int y = random.nextInt(10);
-
-            if (enemyBoard.placeShip(new Ship(type, Math.random() < 0.5), x, y)) {
-                type--;
-            }
-        }
-
-        running = true;
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {

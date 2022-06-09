@@ -2,6 +2,7 @@ package com.battleship;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -14,8 +15,8 @@ import javafx.scene.shape.Rectangle;
 
 public class Board extends Parent {
     private VBox rows = new VBox();
-    private boolean enemy = false;
-    public int ships = 5;
+    private boolean enemy;
+    public int ships = 10;
 
     public Board(boolean enemy, EventHandler<? super MouseEvent> handler) {
         this.enemy = enemy;
@@ -35,7 +36,7 @@ public class Board extends Parent {
 
     public boolean placeShip(Ship ship, int x, int y) {
         if (canPlaceShip(ship, x, y)) {
-            int length = ship.type;
+            int length = ship.decks;
 
             if (ship.vertical) {
                 for (int i = y; i < y + length; i++) {
@@ -73,7 +74,11 @@ public class Board extends Parent {
                 new Point2D(x - 1, y),
                 new Point2D(x + 1, y),
                 new Point2D(x, y - 1),
-                new Point2D(x, y + 1)
+                new Point2D(x, y + 1),
+                new Point2D(x - 1, y-1),
+                new Point2D(x + 1, y+1),
+                new Point2D(x+1, y - 1),
+                new Point2D(x-1, y + 1),
         };
 
         List<Cell> neighbors = new ArrayList<Cell>();
@@ -88,7 +93,7 @@ public class Board extends Parent {
     }
 
     private boolean canPlaceShip(Ship ship, int x, int y) {
-        int length = ship.type;
+        int length = ship.decks;
 
         if (ship.vertical) {
             for (int i = y; i < y + length; i++) {
@@ -138,36 +143,5 @@ public class Board extends Parent {
         return x >= 0 && x < 10 && y >= 0 && y < 10;
     }
 
-    public class Cell extends Rectangle {
-        public int x, y;
-        public Ship ship = null;
-        public boolean wasShot = false;
 
-        private Board board;
-
-        public Cell(int x, int y, Board board) {
-            super(30, 30);
-            this.x = x;
-            this.y = y;
-            this.board = board;
-            setFill(Color.LIGHTGRAY);
-            setStroke(Color.BLACK);
-        }
-
-        public boolean shoot() {
-            wasShot = true;
-            setFill(Color.BLACK);
-
-            if (ship != null) {
-                ship.hit();
-                setFill(Color.RED);
-                if (!ship.isAlive()) {
-                    board.ships--;
-                }
-                return true;
-            }
-
-            return false;
-        }
-    }
 }

@@ -2,30 +2,38 @@ package com.battleship;
 
 import javafx.scene.Parent;
 
-public class Ship extends Parent {
-    public int type;
-    public boolean vertical = true;
+public class Ship {
+    int decks;
+    boolean vertical = true;
+    int health;
+    Board board;
+    int x;
+    int y;
 
-    private int health;
-
-    public Ship(int type, boolean vertical) {
-        this.type = type;
+    public Ship(int decks, boolean vertical, Board board, int x, int y) {
+        this.decks = decks;
+        health = decks;
         this.vertical = vertical;
-        health = type;
-
-        /*VBox vbox = new VBox();
-        for (int i = 0; i < type; i++) {
-            Rectangle square = new Rectangle(30, 30);
-            square.setFill(null);
-            square.setStroke(Color.BLACK);
-            vbox.getChildren().add(square);
-        }
-
-        getChildren().add(vbox);*/
+        this.board = board;
+        this.x = x;
+        this.y = y;
     }
 
     public void hit() {
         health--;
+        if (health == 0) {
+            if (vertical) {
+                //top
+                board.getCell(x-1,y-1).shoot();
+                board.getCell(x,y-1).shoot();
+                board.getCell(x+1,y-1).shoot();
+                //bottom
+                board.getCell(x-1,y+decks).shoot();
+                board.getCell(x,y+decks).shoot();
+                board.getCell(x+1,y+decks).shoot();
+                //sides
+            }
+        }
     }
 
     public boolean isAlive() {
