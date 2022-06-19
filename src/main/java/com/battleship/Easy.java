@@ -9,7 +9,7 @@ public class Easy extends Board implements Enemy {
     public Easy(boolean enemy, EventHandler<? super MouseEvent> handler){
         super(enemy, handler);
     }
-    public boolean placeShips(Board enemyBoard) {
+    @Override public boolean placeShips(Board enemyBoard) {
         Random random = new Random();
         int x = 4;
         int y = 4;
@@ -31,7 +31,7 @@ public class Easy extends Board implements Enemy {
 
         return true;
     }
-    public boolean takeShot(Board playerBoard) {
+    @Override public boolean takeShot(Board playerBoard) {
         Random random = new Random();
         boolean enemyTurn = true;
         int x = 4;
@@ -46,7 +46,7 @@ public class Easy extends Board implements Enemy {
             if (cell.wasShot)
                 continue;
 
-            enemyTurn = cell.shoot();
+            enemyTurn = cell.Shoot();
 
             if (playerBoard.ships == 0) {
                 System.out.println("YOU LOSE");

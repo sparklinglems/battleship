@@ -43,8 +43,7 @@ public class Board extends Parent {
                     Cell cell = getCell(x, i);
                     cell.ship = ship;
                     if (!enemy) {
-                        cell.setFill(Color.WHITE);
-                        cell.setStroke(Color.GREEN);
+                        cell.setFill(Color.BLUE);
                     }
                 }
             }
@@ -53,8 +52,7 @@ public class Board extends Parent {
                     Cell cell = getCell(i, y);
                     cell.ship = ship;
                     if (!enemy) {
-                        cell.setFill(Color.WHITE);
-                        cell.setStroke(Color.GREEN);
+                        cell.setFill(Color.BLUE);
                     }
                 }
             }
@@ -66,7 +64,16 @@ public class Board extends Parent {
     }
 
     public Cell getCell(int x, int y) {
+        if (x >= 0 && y >= 0 && x < 10 && y < 10 )
         return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
+        return null;
+    }
+
+    public void callCells(Ship ship) {
+        for (int i = 0; i < ship.decks; i ++){
+            if (ship.vertical) getCell(ship.x, ship.y + i).ship = ship;
+            else getCell(ship.x + i, ship.y).ship = ship;
+        }
     }
 
     private Cell[] getNeighbors(int x, int y) {
@@ -141,6 +148,15 @@ public class Board extends Parent {
 
     private boolean isValidPoint(double x, double y) {
         return x >= 0 && x < 10 && y >= 0 && y < 10;
+    }
+
+    public void update() {
+        for (int i = 0; i < 10; i ++) {
+            for (int j = 0; j < 10; j ++) {
+                Cell cell = this.getCell(i,j);
+                if (cell.ship != null && cell.ship.health  == 0) cell.MakeRed();
+            }
+        }
     }
 
 

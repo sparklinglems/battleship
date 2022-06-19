@@ -5,7 +5,7 @@ import javafx.scene.shape.Rectangle;
 
 public class Cell extends Rectangle {
         public int x, y;
-        public Ship ship = null;
+        public Ship ship;
         public boolean wasShot = false;
 
         private Board board;
@@ -15,31 +15,36 @@ public class Cell extends Rectangle {
             this.x = x;
             this.y = y;
             this.board = board;
-            setFill(Color.LIGHTGRAY);
+            setFill(Color.WHITE);
             setStroke(Color.BLACK);
+            ship = null;
         }
 
-        public boolean shoot() {
+        public boolean Shoot() {
             //System.out.println(x + "  " + y);
                 wasShot = true;
-                setFill(Color.BLACK);
 
                 if (ship != null) {
                     ship.hit();
-                    setFill(Color.RED);
+                    MakeRed();
                     if (!ship.isAlive()) {
                         board.ships--;
                     }
                     return true;
-                }
+                } else setFill(Color.GRAY);
 
             return false;
 
         }
 
+        public void MakeRed(){
+            wasShot = true;
+            setFill(Color.FIREBRICK);
+        }
+
         public void fin(){
             wasShot = true;
-            setFill(Color.BLACK);
+            setFill(Color.GRAY);
         }
 
 

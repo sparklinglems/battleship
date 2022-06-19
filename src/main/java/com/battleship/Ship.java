@@ -1,7 +1,5 @@
 package com.battleship;
 
-import javafx.scene.Parent;
-
 public class Ship {
     int decks;
     boolean vertical = true;
@@ -10,6 +8,8 @@ public class Ship {
     int x;
     int y;
 
+    Cell[] cells;
+
     public Ship(int decks, boolean vertical, Board board, int x, int y) {
         this.decks = decks;
         health = decks;
@@ -17,19 +17,28 @@ public class Ship {
         this.board = board;
         this.x = x;
         this.y = y;
+        Cell[] cells = new Cell[decks];
+        for (int i = 0; i < decks; i ++) {
+            if (vertical) cells[i] = board.getCell(x, y + i);
+            else cells[i] = board.getCell(x + i, y);
+        }
     }
 
     public void hit() {
         health--;
-        if (health == 0) finish();
+        if (health == 0) Finish();
     }
 
-    private void finish(){
+    public void Finish(){
         boolean x0 = (x != 0);
         boolean y0 = (y != 0);
         boolean x9;
         boolean y9;
         if (vertical) {
+            for (int j = y; j < decks; j++){
+                board.getCell(x,j).MakeRed();
+            }
+
             x9 = (x != 9);
             y9 = (y+decks != 10);
             if (y0) {
